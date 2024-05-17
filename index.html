@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+				html {
+						height: 100%
+				}
+				body {
+						height: 100%
+				}
+				.container {
+						display: flex;				
+						align-items: center;
+						justify-content: center;
+						flex-direction: column;
+						height: 100%
+				}
+		</style>
+		<script>
+				console.log("sakdhfksdjfhskd");
+				function addEntry() {
+						var list = document.getElementById("list");
+
+						var new_entry = document.getElementById("entryBox").value;
+						var entry = document.createElement("li");
+						entry.appendChild(document.createTextNode(new_entry));
+						list.appendChild(entry);
+				}
+				function removeEntry() {
+						console.log("attemping to remove entry");
+				}
+		</script>
+	</head>
+	<body>
+		<div class = "container">
+				<ul id="list"></ul>
+				<div class = "add_entry_container">
+						<input type = "text" id="entryBox" value="entry name..">
+						<button onclick="addEntry()">Add Entry</button>
+						<button onclick="removeEntry()">Remove Entry</button>
+				</div>
+		</div>
+	</body>
+</html>

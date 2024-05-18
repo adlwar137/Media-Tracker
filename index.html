@@ -1,99 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<style>
-				html {
-						height: 100%
-				}
-				body {
-						height: 100%
-				}
-				.container {
-						display: flex;				
-						align-items: center;
-						justify-content: center;
-						flex-direction: column;
-						height: 100%
-				}
-		</style>
-		<script>
-				console.log("sakdhfksdjfhskd");
-
-				let entryTable = [
-						["Brick and Mortar", "Watching"],
-						["Fnaf Movie (Funny)", "Finished"],
-				];
-
-				console.log(entryTable);
-
-				function generateTable(table) {
-						if(document.getElementById("table") != null) {
-								document.getElementById("table").remove();
-						}
-
-						const tbl = document.createElement("table");
-						const tblBody = document.createElement("tbody");
-
-						// create all cells
-						for (let j = 0; j < table.length; j++) {
-								//creates a table row
-								const row = document.createElement("tr");
-
-								for (let k = 0; k < table[j].length; k++) {
-										const cell = document.createElement("td");
-										const cellText = document.createTextNode(table[j][k]);
-										cell.appendChild(cellText);
-										row.appendChild(cell);
-								}
-
-								tblBody.appendChild(row);
-						}
-						tbl.appendChild(tblBody);
-						document.getElementById("tableContainer").appendChild(tbl);
-						tbl.setAttribute("id", "table");
-						tbl.setAttribute("border", "2");
-				}
-
-				function addEntry() {
-						const newEntry = document.getElementById("entryBox").value;
-						const entryState = document.getElementById("entryStateBox").value;
-						entryTable.push([newEntry, entryState]);
-						generateTable(entryTable);
-
-						console.log(entryState);
-
-				}
-
-				function modifyEntry() {
-						const entry = document.getElementById("entryBox").value;
-						const entryState = document.getElementById("entryStateBox").value;
-						for(let i = 0; i < entryTable.length; i++) {
-								if(entryTable[i][0] == entry) {
-										entryTable[i][1] = entryState;
-								}
-						}
-						generateTable(entryTable);
-				}
-
-				function removeEntry() {
-						const entry = document.getElementById("entryBox").value;
-						
-						temp = entryTable;
-						for(let i = 0; i < entryTable.length; i++) {
-								if(entryTable[i][0] == entry) {
-										temp.splice(i,1);
-								}
-						}
-
-						entryTable = temp;
-						generateTable(entryTable);
-				}
-
-		</script>
+		<link rel="stylesheet" href="index.css">
+		<script src="index.js"></script>
 	</head>
 	<body>
 		<div class = "container">
-				<ul id="list"></ul>
 				<div class = "add_entry_container">
 						<input type = "text" id="entryBox" value="entry name..">
 						<select id="entryStateBox">
@@ -109,11 +21,11 @@
 				<button onclick="generateTable(entryTable)">Make Table</button>
 				-->
 				<div id="tableContainer">
-						
+					
 				</div>
 		</div>
 	</body>
 	<script>
-		generateTable(entryTable);
+			generateTable(getCookie("table"));
 	</script>
 </html>

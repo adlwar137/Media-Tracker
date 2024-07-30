@@ -1,39 +1,44 @@
-use std::env;
 use std::fs;
 use std::collections::HashMap;
 use std::io;
-use crate::media_entry::*;
+use crate::media_list::media_entry::*;
+use crate::media_list::*;
 use crate::file_handling::*;
 use std::str::FromStr;
+use std::env;
 
 pub mod parser;
 pub mod file_handling;
-pub mod media_entry;
+pub mod media_list;
 
 
 
 fn main() {
     //TODO check arguments to load a file
+    let args: Vec<String> = env::args().collect();
+
+    let file_path = match args.get(1) {
+        Some(x) => x,
+        None => panic!("asdfasdf"),
+    };
 
 
+    let mut stuff = MediaList::new();
 
+    loop {
+        let reply = ask("L) To list entries\nA) To add an entry\nR) To remove an entry\nM) To modify an entry\nS) To save entries\nQ) To quit");
 
-    // let mut entries: Vec<MediaEntry> = Vec::new();
-    
-    // loop {
-    //     let reply = ask("A) To add an entry\nL) To list entries\nM) To modify an entry\nS) To save entries\nQ) To quit");
-
-    //     match reply.to_lowercase().as_str() {
-    //         "a" => add_entry(&mut entries),
-    //         "l" => list_entries(&entries),
-    //         "m" => modify_entry(&mut entries),
-    //         "s" => println!("saving..."),
-    //         "q" => break,
-    //         _ => println!("whar??? in: ({reply})"),
-    //     };
-    // }
-
-    file_load();
+        match reply.to_lowercase().as_str() {
+            "l" => list_entries(&mut stuff),
+            "a" => add_entry(&mut stuff),
+            //"r" => remove_entry(&mut entries),
+            //"m" => modify_entry(&mut entries),
+            "s" => save_file(stuff.clone(), &file_path),
+            "lo" => file_load(&file_path),
+            "q" => break,
+            _ => println!("whar??? in: ({reply})"),
+        };
+    }
 }
 
 fn ask(query: &str) -> String {
@@ -48,34 +53,15 @@ fn ask(query: &str) -> String {
     answer.trim().to_string()
 }
 
-fn add_entry(entryList: &mut Vec<MediaEntry>) {
-    let name = ask("What is the title?");
-
-    let media = ask("What is the type of media?");
-
-    let entry = MediaEntry {
-        mediaType: MediaType::from_str(&media).expect("dass da wrong numbaaa"),
-        name,
-    };
-
-    entryList.push(entry);
+fn add_entry(list: &mut MediaList) {
+    list.add_entry(MediaEntry {
+        mediaType: MediaType::from_str(&ask("What is the type of media?")).expect("Whar?"),
+        name: ask("What is the title?"),
+    });
 }
 
-fn list_entries(entry_list: &Vec<MediaEntry>) {
-    for entry in entry_list {
-        println!("Entry:");
-        println!("\tName: {}", entry.name);
-        println!("\tType: {}", entry.mediaType);
-    }
-}
-
-fn modify_entry(entry_list: &mut Vec<MediaEntry>) {
-    //decide whether or not to construct a new one
-}
-
-fn remove_entry(entry_list: &mut Vec<MediaEntry>) {
-    //search for name and then delete
-    let query = ask("what is the title of the entry you want to delete?");
+fn list_entries(list: &mut MediaList) {
+    list.list_entries();
 }
 
 fn load_file(file_path: String) -> MediaEntry {

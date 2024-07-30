@@ -1,2 +1,1 @@
-"mediaType" : "Movie"
-"name" : "Big Garf's Field Trip"
+[{"name":"garfieldf","mediaType":"Book"},{"name":"eva","mediaType":"Show"}]

@@ -1,23 +1,22 @@
 use std::fs::File;
 use std::io::Read;
 use std::env;
+use std::fs;
+use std::io::Write;
+use crate::MediaList;
 
-//ipv4 185.107.80.231
-//ipv6 2001:0000:130F:0000:0000:09C0:876A:130B
+pub fn file_load(file_path: &str) {
+    let contents = fs::read_to_string(file_path)
+        .expect("Should have been able to read the file");
 
-pub fn file_load() {
-    let args: Vec<String> = env::args().collect();
+    let parsed = json::parse(&contents);
 
-    let file_path = &args[1];
-
-    println!("In file {file_path}");
-
-    let mut data_file = File::open(file_path).unwrap();
-
-    let mut file_content = String::new();
-
-    data_file.read_to_string(&mut file_content).unwrap();
-
-    println!("File content: {:?}", file_content);
+    dbg!(parsed);
 }
 
+pub fn save_file(contents: MediaList, file_path: &str) {
+    let serialized = json::stringify(contents);
+     
+    let mut f = File::create(file_path).expect("file could not be created");
+    f.write_all(&serialized.as_bytes()).expect("file could not be written");
+}

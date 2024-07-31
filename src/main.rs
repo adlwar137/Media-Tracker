@@ -1,5 +1,3 @@
-use std::fs;
-use std::collections::HashMap;
 use std::io;
 use crate::media_list::media_entry::*;
 use crate::media_list::*;
@@ -25,16 +23,19 @@ fn main() {
 
     let mut stuff = MediaList::new();
 
+    file_load(file_path, &mut stuff);
+
+
     loop {
         let reply = ask("L) To list entries\nA) To add an entry\nR) To remove an entry\nM) To modify an entry\nS) To save entries\nQ) To quit");
 
         match reply.to_lowercase().as_str() {
             "l" => list_entries(&mut stuff),
             "a" => add_entry(&mut stuff),
-            //"r" => remove_entry(&mut entries),
+            "r" => remove_entry(&mut stuff),
             //"m" => modify_entry(&mut entries),
-            "s" => save_file(stuff.clone(), &file_path),
-            "lo" => file_load(&file_path),
+            "s" => save_file(stuff.clone(), file_path),
+            "lo" => file_load(file_path, &mut stuff),
             "q" => break,
             _ => println!("whar??? in: ({reply})"),
         };
@@ -64,33 +65,8 @@ fn list_entries(list: &mut MediaList) {
     list.list_entries();
 }
 
-fn load_file(file_path: String) -> MediaEntry {
-    let raw_file = fs::read_to_string(file_path)
-        .expect("Should have been able to read the file");
+fn remove_entry(list: &mut MediaList) {
+    let name = ask("What is the title?");
 
-    let mut lines = HashMap::new();
-
-    for line in parser::parse_text(raw_file) {
-        lines.insert(line[0].clone(), line[1].clone());
-    }
-
-    file_to_entry(lines)
-}
-
-fn file_to_entry(file: HashMap<String, String>) -> MediaEntry {
-    MediaEntry {
-        mediaType: match file.get("mediaType") {
-            None => panic!("asdfasdfasdf"),
-            Some(thing) => match thing.as_str() {
-                "Movie" => MediaType::Movie,
-                "Book" => MediaType::Book,
-                "Show" => MediaType::Show,
-                _ => panic!("asdfasdfasdf"),
-            },
-        },
-        name: match file.get("name") {
-            None => panic!("asdfasdfasdf"),
-            Some(thing) => thing.to_string(),
-        },
-    }
+    list.remove_entry(&name);
 }

@@ -40,14 +40,3 @@ pub struct MediaEntry {
    pub mediaType: MediaType,
    pub name: String,
 }
-
-impl MediaEntry {
-    pub fn search(list: &Vec<Self>, query: &str) -> Option<Self> {
-        for entry in list {
-            if entry.name == query.to_lowercase().as_str() {
-                return Some(entry.clone());
-            }
-        }
-        None
-    }
-}

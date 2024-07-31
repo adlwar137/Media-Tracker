@@ -1,10 +1,10 @@
 pub fn parse_text(input: String) -> Vec<[String; 2]> {
     let mut bparse = Vec::new();
 
-    let parts = input.split("\n");
+    let parts = input.split('\n');
     
     for part in parts {
-        if part == "" {
+        if part.is_empty() {
             continue;
         }
         bparse.push(part); 
@@ -21,7 +21,7 @@ pub fn parse_text(input: String) -> Vec<[String; 2]> {
 
 fn parse_line(input: String) -> [String; 2] {
     //split by colon and remove whitespace
-    let sides: Vec<_> = input.split(":").collect();
+    let sides: Vec<_> = input.split(':').collect();
 
     //remove whitespace
     let (mut fieldName, mut field) = (sides[0].trim().to_string(), sides[1].trim().to_string());

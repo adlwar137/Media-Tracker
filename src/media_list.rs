@@ -1,4 +1,7 @@
 use crate::media_list::media_entry::*;
+use json::JsonValue::Array;
+use json::JsonValue::Object;
+use std::str::FromStr;
 use json::JsonValue;
 use json::object;
 
@@ -9,17 +12,13 @@ pub struct MediaList {
     pub data: Vec<MediaEntry>,
 }
 
-impl MediaList {
-    // fn add_entry(mut self) {
-    
-    //     let entry = MediaEntry {
-    //         mediaType: MediaType::from_str(&media).expect("dass da wrong numbaaa"),
-    //         name,
-    //     };
-    
-    //     entryList.push(entry);
-    // }
+impl Default for MediaList {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
+impl MediaList {
     pub fn new() -> Self {
         MediaList {
             data: Vec::new(),
@@ -50,15 +49,32 @@ impl MediaList {
 
 impl From<JsonValue> for MediaList {
     fn from(value: JsonValue) -> Self {
-        todo!("well shit");    
+        let mut data = MediaList::new();
+
+        if let Array(vector) = value {
+            for entry in vector {
+                if let Object(object) = entry {
+                    let mtype = MediaType::from_str(&object["mediaType"].to_string()).expect("wrong type");
+                    data.data.push(MediaEntry {
+                        name: object["name"].to_string(),
+                        mediaType: mtype,
+                    });
+                }
+            }
+        } else {
+            panic!("wrong value");
+        }
+
+        data
+
     }
 }
 
-impl Into<JsonValue> for MediaList {
-    fn into(self) -> JsonValue {
+impl From<MediaList> for JsonValue {
+    fn from(val: MediaList) -> Self {
         let mut the_array = json::JsonValue::new_array();
 
-        for entry in self.data {
+        for entry in val.data {
             let wrapped_entry = object!{
                 name: entry.name,
                 mediaType: entry.mediaType.to_string(),

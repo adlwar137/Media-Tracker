@@ -8,6 +8,34 @@ pub enum MediaType {
     Show,
 }
 
+pub enum MediaProgress {
+    Movie(bool),
+    Show(i32, i32),
+}
+
+#[derive(Debug, Clone)]
+pub struct MediaEntry {
+   pub mediaType: MediaType,
+   pub name: String,
+}
+
+impl MediaProgress {
+    pub fn get_progress(&self) -> f32 {
+        match self {
+            Movie(x) => {
+                if x {
+                    100.0
+                } else {
+                    0.0
+                }
+            },
+            Show(x, y) => {
+                x/y
+            }
+        }
+    }
+}
+
 // TODO makes this a proper error definition
 #[derive(Debug)]
 pub struct FunneError;
@@ -35,8 +63,3 @@ impl fmt::Display for MediaType {
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct MediaEntry {
-   pub mediaType: MediaType,
-   pub name: String,
-}
